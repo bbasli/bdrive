@@ -12,7 +12,7 @@ import { useMutation, useQuery } from "convex/react";
 
 export default function Home() {
   const files = useQuery(api.files.getFiles);
-  const createFile = useMutation(api.files.createFile);
+  const uploadFile = useMutation(api.files.uploadFile);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -29,11 +29,7 @@ export default function Home() {
 
       {files?.map((file) => <div key={file._id}>{file.name}</div>)}
 
-      <Button
-        onClick={() => {
-          createFile({ name: "example" });
-        }}
-      >
+      <Button onClick={() => uploadFile({ name: "example" })}>
         Create File
       </Button>
     </main>
