@@ -7,11 +7,18 @@ import {
   SignedOut,
   SignInButton,
   SignOutButton,
+  useOrganization,
+  useUser,
 } from "@clerk/nextjs";
 import { useMutation, useQuery } from "convex/react";
 
 export default function Home() {
-  const files = useQuery(api.files.getFiles);
+  const { organization } = useOrganization();;
+  const authState = useUser();
+
+  const orgId = organization?.id || authState?.user?.id || "skip";
+
+  const files = useQuery(api.files.getFiles, { orgId });
   const uploadFile = useMutation(api.files.uploadFile);
 
   return (
@@ -29,7 +36,14 @@ export default function Home() {
 
       {files?.map((file) => <div key={file._id}>{file.name}</div>)}
 
-      <Button onClick={() => uploadFile({ name: "example" })}>
+      <Button
+        onClick={() =>
+          uploadFile({
+            orgId,
+            name: "example",
+          })
+        }
+      >
         Create File
       </Button>
     </main>
