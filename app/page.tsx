@@ -30,6 +30,7 @@ import { useForm } from "react-hook-form";
 
 import { z } from "zod";
 import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
   title: z.string().min(2).max(200),
@@ -39,6 +40,7 @@ const formSchema = z.object({
 });
 
 export default function Home() {
+  const { toast } = useToast();
   const organization = useOrganization();
   const authState = useUser();
 
@@ -67,27 +69,40 @@ export default function Home() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (!orgId) return;
 
-    const postUrl = await generateUploadUrl();
+    try {
+      const postUrl = await generateUploadUrl();
 
-    const selectedFile = values.file[0];
+      const selectedFile = values.file[0];
 
-    const result = await fetch(postUrl, {
-      method: "POST",
-      headers: { "Content-Type": selectedFile.type },
-      body: selectedFile,
-    });
+      const result = await fetch(postUrl, {
+        method: "POST",
+        headers: { "Content-Type": selectedFile.type },
+        body: selectedFile,
+      });
 
-    const { storageId } = await result.json();
+      const { storageId } = await result.json();
 
-    await uploadFile({
-      orgId,
-      fileId: storageId,
-      name: values.title,
-    });
+      await uploadFile({
+        orgId,
+        fileId: storageId,
+        name: values.title,
+      });
 
-    form.reset();
+      form.reset();
 
-    setIsFileDialogOpen(false);
+      setIsFileDialogOpen(false);
+      toast({
+        variant: "success",
+        title: "File uploaded successfully",
+        description: "Now you can see your file in the list.",
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Failed to upload file",
+        description: "Something went wrong. Please try again later.",
+      });
+    }
   }
 
   return (
