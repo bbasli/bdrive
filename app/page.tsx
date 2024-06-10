@@ -31,6 +31,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
   title: z.string().min(2).max(200),
@@ -156,7 +157,19 @@ export default function Home() {
                         </FormItem>
                       )}
                     />
-                    <Button type="submit">Submit</Button>
+                    <Button
+                      type="submit"
+                      disabled={form.formState.isSubmitting}
+                    >
+                      {form.formState.isSubmitting ? (
+                        <div className="flex gap-2 items-center">
+                          Uploding ...
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        </div>
+                      ) : (
+                        "Upload"
+                      )}
+                    </Button>
                   </form>
                 </Form>
               </DialogDescription>
