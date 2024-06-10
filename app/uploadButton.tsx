@@ -106,69 +106,66 @@ export default function UploadButton() {
   }
 
   return (
-    <div className="flex justify-between items-center">
-      <h1 className="text-4xl font-bold">Your Files</h1>
-      <Dialog
-        open={isFileDialogOpen}
-        onOpenChange={(isOpen) => {
-          setIsFileDialogOpen(isOpen);
-          form.reset();
-        }}
-      >
-        <DialogTrigger asChild>
-          <Button onClick={() => setIsFileDialogOpen(true)}>Upload File</Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle className="mb-8">Upload Your File</DialogTitle>
-            <DialogDescription>
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="space-y-8"
-                >
-                  <FormField
-                    control={form.control}
-                    name="title"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Title</FormLabel>
-                        <FormControl>
-                          <Input placeholder="shadcn" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="file"
-                    render={() => (
-                      <FormItem>
-                        <FormLabel>File</FormLabel>
-                        <FormControl>
-                          <Input type="file" {...fileRef} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <Button type="submit" disabled={form.formState.isSubmitting}>
-                    {form.formState.isSubmitting ? (
-                      <div className="flex gap-2 items-center">
-                        Uploding ...
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      </div>
-                    ) : (
-                      "Upload"
-                    )}
-                  </Button>
-                </form>
-              </Form>
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
-    </div>
+    <Dialog
+      open={isFileDialogOpen}
+      onOpenChange={(isOpen) => {
+        setIsFileDialogOpen(isOpen);
+        form.reset();
+      }}
+    >
+      <DialogTrigger asChild>
+        <Button onClick={() => setIsFileDialogOpen(true)}>Upload File</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle className="mb-8">Upload Your File</DialogTitle>
+          <DialogDescription>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-8"
+              >
+                <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Title</FormLabel>
+                      <FormControl>
+                        <Input placeholder="shadcn" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="file"
+                  render={() => (
+                    <FormItem>
+                      <FormLabel>File</FormLabel>
+                      <FormControl>
+                        <Input type="file" {...fileRef} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button type="submit" disabled={form.formState.isSubmitting}>
+                  {form.formState.isSubmitting ? (
+                    <div className="flex gap-2 items-center">
+                      Uploding ...
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    </div>
+                  ) : (
+                    "Upload"
+                  )}
+                </Button>
+              </form>
+            </Form>
+          </DialogDescription>
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
   );
 }
