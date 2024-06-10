@@ -13,7 +13,7 @@ export default function Header() {
   return (
     <div className="border-b py-4 bg-gray-50">
       <div className="container mx-auto flex items-center justify-between">
-        <h2>B-Drive</h2>
+        <h1 className="text-2xl font-bold text-gray-900">B-Drive</h1>
         <div>
           <OrganizationSwitcher />
           <UserButton />
