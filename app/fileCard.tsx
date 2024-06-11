@@ -36,6 +36,13 @@ import { ReactNode, useState } from "react";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useToast } from "@/components/ui/use-toast";
+import Image from "next/image";
+
+const fileTypesIconMap = {
+  image: <ImageIcon />,
+  pdf: <FileTextIcon />,
+  csv: <GanttChartIcon />,
+} as Record<Doc<"files">["type"], ReactNode>;
 
 function FileCardActions({ fileId }: { fileId: Doc<"files">["_id"] }) {
   const { toast } = useToast();
@@ -105,17 +112,25 @@ function FileCardActions({ fileId }: { fileId: Doc<"files">["_id"] }) {
   );
 }
 
-export default function FileCard({ file }: { file: Doc<"files"> }) {
-  const fileTypesIconMap = {
-    image: <ImageIcon />,
-    pdf: <FileTextIcon />,
-    csv: <GanttChartIcon />,
-  } as Record<Doc<"files">["type"], ReactNode>;
+const FilePreview = ({ file }: { file: Doc<"files"> }) => {
+  const { name, type, url } = file;
 
+  if (type === "image") {
+    return <Image src={url} width={128} height={64} alt={name} />;
+  } else if (type === "pdf") {
+    return <FileTextIcon className="h-20 w-20" />;
+  } else if (type === "csv") {
+    return <GanttChartIcon className="h-20 w-20" />;
+  }
+
+  return null;
+};
+
+export default function FileCard({ file }: { file: Doc<"files"> }) {
   return (
-    <Card>
+    <Card className="flex flex-col gap-2">
       <CardHeader className="relative">
-        <CardTitle className="flex gap-2">
+        <CardTitle className="flex gap-4">
           {fileTypesIconMap[file.type]}
           {file.name}
         </CardTitle>
@@ -123,8 +138,10 @@ export default function FileCard({ file }: { file: Doc<"files"> }) {
           <FileCardActions fileId={file._id} />
         </div>
       </CardHeader>
-      <CardContent></CardContent>
-      <CardFooter>
+      <CardContent className="h-[200px] flex justify-center items-center">
+        <FilePreview file={file} />
+      </CardContent>
+      <CardFooter className="flex justify-center">
         <Button>Download</Button>
       </CardFooter>
     </Card>

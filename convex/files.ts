@@ -60,11 +60,18 @@ export const uploadFile = mutation({
       throw new ConvexError("you do not have access to this org");
     }
 
+    const url = await ctx.storage.getUrl(args.fileId);
+
+    if (!url) {
+      throw new ConvexError("file not found");
+    }
+
     await ctx.db.insert("files", {
       name: args.name,
       type: args.type,
       orgId: args.orgId,
       fileId: args.fileId,
+      url,
     });
   },
 });

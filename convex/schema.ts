@@ -15,6 +15,7 @@ export default defineSchema({
     type: filesTypes,
     orgId: v.string(),
     fileId: v.id("_storage"),
+    url: v.string(),
   }).index("by_orgId", ["orgId"]),
 
   users: defineTable({
