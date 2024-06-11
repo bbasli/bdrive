@@ -16,7 +16,12 @@ export default defineSchema({
     orgId: v.string(),
     fileId: v.id("_storage"),
     url: v.string(),
-  }).index("by_orgId", ["orgId"]),
+  })
+    .index("by_orgId", ["orgId"])
+    .searchIndex("by_name", {
+      searchField: "name",
+      filterFields: ["orgId"],
+    }),
 
   users: defineTable({
     name: v.string(),

@@ -142,7 +142,13 @@ export default function FileCard({ file }: { file: Doc<"files"> }) {
         <FilePreview file={file} />
       </CardContent>
       <CardFooter className="flex justify-center">
-        <Button>Download</Button>
+        <Button
+          onClick={() => {
+            window.open(file.url, "_blank");
+          }}
+        >
+          Download
+        </Button>
       </CardFooter>
     </Card>
   );

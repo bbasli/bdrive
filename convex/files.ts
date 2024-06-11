@@ -78,7 +78,8 @@ export const uploadFile = mutation({
 
 export const getFiles = query({
   args: {
-    orgId: v?.string(),
+    orgId: v.string(),
+    query: v.optional(v.string()),
   },
   async handler(ctx, args) {
     const identity = await ctx.auth.getUserIdentity();
@@ -87,9 +88,20 @@ export const getFiles = query({
       return [];
     }
 
+    if (!args.query) {
+      return await ctx.db
+        .query("files")
+        .withIndex("by_orgId", (q) => q.eq("orgId", args.orgId))
+        .collect();
+    }
+
+    const query = args.query;
+
     return await ctx.db
       .query("files")
-      .withIndex("by_orgId", (q) => q.eq("orgId", args.orgId))
+      .withSearchIndex("by_name", (q) =>
+        q.search("name", query).eq("orgId", args.orgId)
+      )
       .collect();
   },
 });
