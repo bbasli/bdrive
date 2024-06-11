@@ -32,6 +32,7 @@ import { z } from "zod";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
+import { Doc } from "@/convex/_generated/dataModel";
 
 const formSchema = z.object({
   title: z.string().min(2).max(200),
@@ -74,6 +75,26 @@ export default function UploadButton() {
 
       const selectedFile = values.file[0];
 
+      const fileTypesMap = {
+        "image/jpeg": "image",
+        "image/png": "image",
+        "image/gif": "image",
+        "image/svg+xml": "image",
+        "application/pdf": "pdf",
+        "text/csv": "csv",
+      } as Record<string, Doc<"files">["type"]>;
+
+      const fileType = fileTypesMap[selectedFile.type];
+
+      if (!fileType) {
+        toast({
+          variant: "destructive",
+          title: "Invalid file type",
+          description: "Only images, pdfs and csv files are allowed.",
+        });
+        return;
+      }
+
       const result = await fetch(postUrl, {
         method: "POST",
         headers: { "Content-Type": selectedFile.type },
@@ -84,6 +105,7 @@ export default function UploadButton() {
 
       await uploadFile({
         orgId,
+        type: fileType,
         fileId: storageId,
         name: values.title,
       });

@@ -23,7 +23,12 @@ export default function Home() {
 
   const files = useQuery(api.files.getFiles, orgId ? { orgId } : "skip");
 
-  let list = <Loader2 className="animate-spin h-24 w-24" />;
+  let list = (
+    <div className="flex items-center justify-center flex-col gap-8 mt-24">
+      <Loader2 className="animate-spin h-32 w-32 text-gray-500" />
+      <span className="text-2xl">Loading your images...</span>
+    </div>
+  );
 
   if (files && files?.length === 0) {
     list = <EmptyFileList />;

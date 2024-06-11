@@ -24,9 +24,15 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import { Doc } from "@/convex/_generated/dataModel";
-import { EllipsisVertical, Trash2 } from "lucide-react";
+import {
+  EllipsisVertical,
+  FileTextIcon,
+  GanttChartIcon,
+  ImageIcon,
+  Trash2,
+} from "lucide-react";
 
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useToast } from "@/components/ui/use-toast";
@@ -100,18 +106,24 @@ function FileCardActions({ fileId }: { fileId: Doc<"files">["_id"] }) {
 }
 
 export default function FileCard({ file }: { file: Doc<"files"> }) {
+  const fileTypesIconMap = {
+    image: <ImageIcon />,
+    pdf: <FileTextIcon />,
+    csv: <GanttChartIcon />,
+  } as Record<Doc<"files">["type"], ReactNode>;
+
   return (
     <Card>
       <CardHeader className="relative">
-        <CardTitle>
-          <div className="absolute top-2 right-2">
-            <FileCardActions fileId={file._id} />
-          </div>
+        <CardTitle className="flex gap-2">
+          {fileTypesIconMap[file.type]}
+          {file.name}
         </CardTitle>
+        <div className="absolute top-2 right-2">
+          <FileCardActions fileId={file._id} />
+        </div>
       </CardHeader>
-      <CardContent>
-        <p>{file.name}</p>
-      </CardContent>
+      <CardContent></CardContent>
       <CardFooter>
         <Button>Download</Button>
       </CardFooter>
