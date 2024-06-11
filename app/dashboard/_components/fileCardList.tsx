@@ -1,7 +1,5 @@
 import { Doc } from "@/convex/_generated/dataModel";
 import FileCard from "./fileCard";
-import UploadButton from "./uploadButton";
-import SearchBar from "./search-bar";
 
 export default function FileCardList({ files }: { files: Doc<"files">[] }) {
   return (
