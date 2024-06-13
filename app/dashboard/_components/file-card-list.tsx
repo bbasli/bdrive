@@ -1,5 +1,5 @@
 import { Doc } from "@/convex/_generated/dataModel";
-import FileCard from "./fileCard";
+import FileCard from "./file-card";
 
 export default function FileCardList({ files }: { files: Doc<"files">[] }) {
   return (

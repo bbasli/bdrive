@@ -13,8 +13,8 @@ import { useOrganization, useUser } from "@clerk/nextjs";
 import { api } from "@/convex/_generated/api";
 
 import UploadButton from "../_components/uploadButton";
-import EmptyFileList from "../_components/emptyFileList";
-import FileCardList from "../_components/fileCardList";
+import EmptyFileList from "../_components/empty-file-list";
+import FileCardList from "../_components/file-card-list";
 import SearchBar from "../_components/search-bar";
 
 export default function FilesPage() {
