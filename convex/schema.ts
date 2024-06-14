@@ -23,6 +23,12 @@ export default defineSchema({
       filterFields: ["orgId"],
     }),
 
+  favorites: defineTable({
+    fileId: v.id("files"),
+    orgId: v.string(),
+    userId: v.id("users"),
+  }).index("by_userId_orgId_fileId", ["userId", "orgId", "fileId"]),
+
   users: defineTable({
     name: v.string(),
     tokenIdentifier: v.string(),

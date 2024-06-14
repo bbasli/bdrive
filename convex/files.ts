@@ -133,3 +133,60 @@ export const deleteFile = mutation({
     await ctx.storage.delete(file.fileId);
   },
 });
+
+export const toggleFavorite = mutation({
+  args: {
+    fileId: v.id("files"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new ConvexError("you must be logged in to favorite files");
+    }
+
+    const file = await ctx.db.get(args.fileId);
+
+    if (!file) {
+      throw new ConvexError("file not found");
+    }
+
+    const hasAccess = await hasAccessToOrg(ctx, file.orgId);
+
+    if (!hasAccess) {
+      throw new ConvexError("you do not have access to favorite this file");
+    }
+
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_tokenIdentifier", (q) =>
+        q.eq("tokenIdentifier", identity.tokenIdentifier)
+      )
+      .first();
+
+    if (!user) {
+      throw new ConvexError(
+        `expected user to be defined ${identity.tokenIdentifier}`
+      );
+    }
+
+    const favorite = await ctx.db
+      .query("favorites")
+      .withIndex("by_userId_orgId_fileId", (q) =>
+        q.eq("userId", user._id).eq("orgId", file.orgId).eq("fileId", file._id)
+      )
+      .first();
+
+    if (!favorite) {
+      await ctx.db.insert("favorites", {
+        fileId: file._id,
+        userId: user._id,
+        orgId: file.orgId,
+      });
+
+      return;
+    }
+
+    await ctx.db.delete(favorite._id);
+  },
+});
