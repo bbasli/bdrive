@@ -50,6 +50,7 @@ function FileCardActions({ fileId }: { fileId: Doc<"files">["_id"] }) {
   const { toast } = useToast();
 
   const deleteFile = useMutation(api.files.deleteFile);
+  const toggleFavorite = useMutation(api.files.toggleFavorite);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -71,6 +72,23 @@ function FileCardActions({ fileId }: { fileId: Doc<"files">["_id"] }) {
         title: "Failed to delete file",
         description:
           "Something went wrong while deleting the file. Please try again later.",
+      });
+    }
+  };
+
+  const handleToggleFavorite = async () => {
+    if (!fileId) {
+      return;
+    }
+
+    try {
+      await toggleFavorite({ fileId });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Failed to favorite file",
+        description:
+          "Something went wrong while favoriting the file. Please try again later.",
       });
     }
   };
@@ -102,9 +120,9 @@ function FileCardActions({ fileId }: { fileId: Doc<"files">["_id"] }) {
           <EllipsisVertical className="cursor-pointer" />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-        <DropdownMenuItem
+          <DropdownMenuItem
             className="flex gap-2 items-center text-yellow-600 cursor-pointer"
-            onClick={() => setIsDialogOpen(true)}
+            onClick={handleToggleFavorite}
           >
             <StarIcon className="h-4 w-4" /> Favorite
           </DropdownMenuItem>
