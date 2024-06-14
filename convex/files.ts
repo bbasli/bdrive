@@ -1,6 +1,7 @@
 import { ConvexError, v } from "convex/values";
 import { mutation, MutationCtx, query, QueryCtx } from "./_generated/server";
 import { filesTypes } from "./schema";
+import { Id } from "./_generated/dataModel";
 
 export const generateUploadUrl = mutation(async (ctx) => {
   const identity = await ctx.auth.getUserIdentity();
@@ -44,6 +45,42 @@ export async function hasAccessToOrg(
   }
 
   return { user };
+}
+
+async function hasAccessToFile(
+  ctx: QueryCtx | MutationCtx,
+  fileId: Id<"files">
+) {
+  const identity = await ctx.auth.getUserIdentity();
+
+  if (!identity) {
+    throw new ConvexError("you must be logged in to favorite files");
+  }
+
+  const file = await ctx.db.get(fileId);
+
+  if (!file) {
+    throw new ConvexError("file not found");
+  }
+
+  const hasAccess = await hasAccessToOrg(ctx, file.orgId);
+
+  if (!hasAccess) {
+    return null;
+  }
+
+  const user = await ctx.db
+    .query("users")
+    .withIndex("by_tokenIdentifier", (q) =>
+      q.eq("tokenIdentifier", identity.tokenIdentifier)
+    )
+    .first();
+
+  if (!user) {
+    return null;
+  }
+
+  return { user, file };
 }
 
 export const uploadFile = mutation({
@@ -111,23 +148,13 @@ export const deleteFile = mutation({
     fileId: v.id("files"),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-
-    if (!identity) {
-      throw new ConvexError("you must be logged in to delete files");
-    }
-
-    const file = await ctx.db.get(args.fileId);
-
-    if (!file) {
-      throw new ConvexError("file not found");
-    }
-
-    const hasAccess = await hasAccessToOrg(ctx, file.orgId);
+    const hasAccess = await hasAccessToFile(ctx, args.fileId);
 
     if (!hasAccess) {
-      throw new ConvexError("you do not have access to delete this file");
+      throw new ConvexError("you do not have access to favorite this file");
     }
+
+    const { file } = hasAccess;
 
     await ctx.db.delete(file._id);
     await ctx.storage.delete(file.fileId);
@@ -139,36 +166,13 @@ export const toggleFavorite = mutation({
     fileId: v.id("files"),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-
-    if (!identity) {
-      throw new ConvexError("you must be logged in to favorite files");
-    }
-
-    const file = await ctx.db.get(args.fileId);
-
-    if (!file) {
-      throw new ConvexError("file not found");
-    }
-
-    const hasAccess = await hasAccessToOrg(ctx, file.orgId);
+    const hasAccess = await hasAccessToFile(ctx, args.fileId);
 
     if (!hasAccess) {
       throw new ConvexError("you do not have access to favorite this file");
     }
 
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_tokenIdentifier", (q) =>
-        q.eq("tokenIdentifier", identity.tokenIdentifier)
-      )
-      .first();
-
-    if (!user) {
-      throw new ConvexError(
-        `expected user to be defined ${identity.tokenIdentifier}`
-      );
-    }
+    const { user, file } = hasAccess;
 
     const favorite = await ctx.db
       .query("favorites")
