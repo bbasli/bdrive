@@ -10,6 +10,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -29,6 +30,7 @@ import {
   FileTextIcon,
   GanttChartIcon,
   ImageIcon,
+  StarIcon,
   Trash2,
 } from "lucide-react";
 
@@ -100,6 +102,13 @@ function FileCardActions({ fileId }: { fileId: Doc<"files">["_id"] }) {
           <EllipsisVertical className="cursor-pointer" />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
+        <DropdownMenuItem
+            className="flex gap-2 items-center text-yellow-600 cursor-pointer"
+            onClick={() => setIsDialogOpen(true)}
+          >
+            <StarIcon className="h-4 w-4" /> Favorite
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
           <DropdownMenuItem
             className="flex gap-2 items-center text-red-600 cursor-pointer"
             onClick={() => setIsDialogOpen(true)}
