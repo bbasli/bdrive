@@ -17,7 +17,13 @@ import EmptyFileList from "../_components/empty-file-list";
 import FileCardList from "../_components/file-card-list";
 import SearchBar from "../_components/search-bar";
 
-export default function FileBrowser({ title }: { title: string }) {
+export default function FileBrowser({
+  title,
+  favorites,
+}: {
+  title: string;
+  favorites?: boolean;
+}) {
   const organizationState = useOrganization();
   const authState = useUser();
 
@@ -29,7 +35,10 @@ export default function FileBrowser({ title }: { title: string }) {
     orgId = organizationState.organization?.id || authState.user?.id;
   }
 
-  const files = useQuery(api.files.getFiles, orgId ? { orgId, query } : "skip");
+  const files = useQuery(
+    api.files.getFiles,
+    orgId ? { orgId, query, favorites } : "skip"
+  );
   const isLoading = files === undefined;
 
   return (
