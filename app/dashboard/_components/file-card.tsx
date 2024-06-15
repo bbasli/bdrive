@@ -39,6 +39,7 @@ import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
+import { Protect } from "@clerk/nextjs";
 
 const fileTypesIconMap = {
   image: <ImageIcon />,
@@ -149,13 +150,15 @@ function FileCardActions({
               </div>
             )}
           </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            className="flex gap-2 items-center text-red-600 cursor-pointer"
-            onClick={() => setIsDialogOpen(true)}
-          >
-            <Trash2 className="h-4 w-4" /> Delete
-          </DropdownMenuItem>
+          <Protect role="org:admin">
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="flex gap-2 items-center text-red-600 cursor-pointer"
+              onClick={() => setIsDialogOpen(true)}
+            >
+              <Trash2 className="h-4 w-4" /> Delete
+            </DropdownMenuItem>
+          </Protect>
         </DropdownMenuContent>
       </DropdownMenu>
     </>
