@@ -186,7 +186,14 @@ export const deleteFile = mutation({
       throw new ConvexError("you do not have access to favorite this file");
     }
 
-    const { file } = hasAccess;
+    const { user, file } = hasAccess;
+
+    const isAdmin =
+      user.orgIds.find(({ orgId }) => orgId === file.orgId)?.role === "admin";
+
+    if (!isAdmin) {
+      throw new ConvexError("you do not have access to delete this file");
+    }
 
     await ctx.db.delete(file._id);
     await ctx.storage.delete(file.fileId);
