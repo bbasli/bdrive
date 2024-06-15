@@ -46,7 +46,15 @@ const fileTypesIconMap = {
   csv: <GanttChartIcon />,
 } as Record<Doc<"files">["type"], ReactNode>;
 
-function FileCardActions({ fileId }: { fileId: Doc<"files">["_id"] }) {
+type FileWithIsFavorite = Doc<"files"> & { isFavorite: boolean };
+
+function FileCardActions({
+  fileId,
+  isFavorite,
+}: {
+  fileId: Doc<"files">["_id"];
+  isFavorite: boolean;
+}) {
   const { toast } = useToast();
 
   const deleteFile = useMutation(api.files.deleteFile);
@@ -83,6 +91,13 @@ function FileCardActions({ fileId }: { fileId: Doc<"files">["_id"] }) {
 
     try {
       await toggleFavorite({ fileId });
+
+      toast({
+        variant: "success",
+        title: isFavorite
+          ? "File removed from favorites"
+          : "File added to favorites",
+      });
     } catch (error) {
       toast({
         variant: "destructive",
@@ -121,10 +136,18 @@ function FileCardActions({ fileId }: { fileId: Doc<"files">["_id"] }) {
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuItem
-            className="flex gap-2 items-center text-yellow-600 cursor-pointer"
+            className="flex gap-2 items-center cursor-pointer"
             onClick={handleToggleFavorite}
           >
-            <StarIcon className="h-4 w-4" /> Favorite
+            {isFavorite ? (
+              <>
+                <StarIcon className="h-4 w-4" /> Unfavorite
+              </>
+            ) : (
+              <div className="text-yellow-600 flex gap-2 items-center">
+                <StarIcon className="h-4 w-4" /> Favorite
+              </div>
+            )}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
@@ -153,7 +176,7 @@ const FilePreview = ({ file }: { file: Doc<"files"> }) => {
   return null;
 };
 
-export default function FileCard({ file }: { file: Doc<"files"> }) {
+export default function FileCard({ file }: { file: FileWithIsFavorite }) {
   return (
     <Card className="flex flex-col gap-2">
       <CardHeader className="relative">
@@ -162,7 +185,7 @@ export default function FileCard({ file }: { file: Doc<"files"> }) {
           {file.name}
         </CardTitle>
         <div className="absolute top-2 right-2">
-          <FileCardActions fileId={file._id} />
+          <FileCardActions fileId={file._id} isFavorite={file.isFavorite} />
         </div>
       </CardHeader>
       <CardContent className="h-[200px] flex justify-center items-center">

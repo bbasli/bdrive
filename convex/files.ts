@@ -155,20 +155,23 @@ export const getFiles = query({
         .collect();
     }
 
-    if (args.favorites) {
-      const favorites = await ctx.db
-        .query("favorites")
-        .withIndex("by_userId_orgId_fileId", (q) =>
-          q.eq("userId", user._id).eq("orgId", args.orgId)
-        )
-        .collect();
+    const favorites = await ctx.db
+      .query("favorites")
+      .withIndex("by_userId_orgId_fileId", (q) =>
+        q.eq("userId", user._id).eq("orgId", args.orgId)
+      )
+      .collect();
 
+    if (args.favorites) {
       files = files.filter((file) =>
         favorites.some((favorite) => favorite.fileId === file._id)
       );
     }
 
-    return files;
+    return files.map((file) => ({
+      ...file,
+      isFavorite: favorites.some((favorite) => favorite.fileId === file._id),
+    }));
   },
 });
 
