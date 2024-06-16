@@ -117,7 +117,7 @@ export const getFiles = query({
   args: {
     orgId: v.string(),
     query: v.optional(v.string()),
-    favorites: v.optional(v.boolean()),
+    favoritesOnly: v.optional(v.boolean()),
   },
   async handler(ctx, args) {
     const identity = await ctx.auth.getUserIdentity();
@@ -162,7 +162,7 @@ export const getFiles = query({
       )
       .collect();
 
-    if (args.favorites) {
+    if (args.favoritesOnly) {
       files = files.filter((file) =>
         favorites.some((favorite) => favorite.fileId === file._id)
       );
