@@ -196,7 +196,6 @@ export const deleteFile = mutation({
     }
 
     await ctx.db.delete(file._id);
-    await ctx.storage.delete(file.fileId);
   },
 });
 
