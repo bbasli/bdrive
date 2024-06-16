@@ -20,9 +20,11 @@ import SearchBar from "../_components/search-bar";
 export default function FileBrowser({
   title,
   favoritesOnly,
+  deletedOnly,
 }: {
   title: string;
   favoritesOnly?: boolean;
+  deletedOnly?: boolean;
 }) {
   const organizationState = useOrganization();
   const authState = useUser();
@@ -37,7 +39,7 @@ export default function FileBrowser({
 
   const files = useQuery(
     api.files.getFiles,
-    orgId ? { orgId, query, favoritesOnly } : "skip"
+    orgId ? { orgId, query, favoritesOnly, deletedOnly } : "skip"
   );
   const isLoading = files === undefined;
 

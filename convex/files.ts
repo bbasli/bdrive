@@ -118,6 +118,7 @@ export const getFiles = query({
     orgId: v.string(),
     query: v.optional(v.string()),
     favoritesOnly: v.optional(v.boolean()),
+    deletedOnly: v.optional(v.boolean()),
   },
   async handler(ctx, args) {
     const identity = await ctx.auth.getUserIdentity();
@@ -168,6 +169,12 @@ export const getFiles = query({
       );
     }
 
+    files = files.filter(
+      ({ shouldDelete }) => shouldDelete === args.deletedOnly
+    );
+
+    console.log("after deleteds", files);
+
     return files.map((file) => ({
       ...file,
       isFavorite: favorites.some((favorite) => favorite.fileId === file._id),
@@ -195,7 +202,9 @@ export const deleteFile = mutation({
       throw new ConvexError("you do not have access to delete this file");
     }
 
-    await ctx.db.delete(file._id);
+    await ctx.db.patch(file._id, {
+      shouldDelete: true,
+    });
   },
 });
 
