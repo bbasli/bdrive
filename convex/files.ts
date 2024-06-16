@@ -173,8 +173,6 @@ export const getFiles = query({
       ({ shouldDelete }) => shouldDelete === args.deletedOnly
     );
 
-    console.log("after deleteds", files);
-
     return files.map((file) => ({
       ...file,
       isFavorite: favorites.some((favorite) => favorite.fileId === file._id),
