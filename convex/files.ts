@@ -209,6 +209,30 @@ export const deleteFile = mutation({
   },
 });
 
+export const restoreFile = mutation({
+  args: {
+    fileId: v.id("files"),
+  },
+  handler: async (ctx, args) => {
+    const hasAccess = await hasAccessToFile(ctx, args.fileId);
+
+    if (!hasAccess) {
+      throw new ConvexError("you do not have access to favorite this file");
+    }
+
+    const { user, file } = hasAccess;
+
+    const isAdmin =
+      user.orgIds.find(({ orgId }) => orgId === file.orgId)?.role === "admin";
+
+    if (!isAdmin) {
+      throw new ConvexError("you do not have access to restore this file");
+    }
+
+    await ctx.db.patch(file._id, { deleteAt: undefined });
+  },
+});
+
 export const toggleFavorite = mutation({
   args: {
     fileId: v.id("files"),

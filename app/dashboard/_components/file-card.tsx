@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -26,6 +28,7 @@ import {
 
 import { Doc } from "@/convex/_generated/dataModel";
 import {
+  AmbulanceIcon,
   EllipsisVertical,
   FileTextIcon,
   GanttChartIcon,
@@ -40,7 +43,8 @@ import { api } from "@/convex/_generated/api";
 import { useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
 import { Protect } from "@clerk/nextjs";
-import { ConvexError } from "convex/values";
+import { usePathname } from "next/navigation";
+import moment from "moment";
 
 const fileTypesIconMap = {
   image: <ImageIcon />,
@@ -59,7 +63,11 @@ function FileCardActions({
 }) {
   const { toast } = useToast();
 
+  const pathname = usePathname();
+
   const deleteFile = useMutation(api.files.deleteFile);
+  const restoreFile = useMutation(api.files.restoreFile);
+
   const toggleFavorite = useMutation(api.files.toggleFavorite);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -112,6 +120,24 @@ function FileCardActions({
     }
   };
 
+  const handleRestore = async () => {
+    try {
+      await restoreFile({ fileId });
+
+      toast({
+        variant: "success",
+        title: "File restored successfully",
+      });
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Failed to restore file",
+        description:
+          error.data ||
+          "Something went wrong while restoring the file. Please try again later.",
+      });
+    }
+  };
   return (
     <>
       <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -139,29 +165,50 @@ function FileCardActions({
           <EllipsisVertical className="cursor-pointer" />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem
-            className="flex gap-2 items-center cursor-pointer"
-            onClick={handleToggleFavorite}
-          >
-            {isFavorite ? (
-              <>
-                <StarIcon className="h-4 w-4" /> Unfavorite
-              </>
-            ) : (
-              <div className="text-yellow-600 flex gap-2 items-center">
-                <StarIcon className="h-4 w-4" /> Favorite
-              </div>
-            )}
-          </DropdownMenuItem>
+          {/* FAVORITE ACTION */}
+          {pathname.includes("/dashboard/trash") ? null : (
+            <DropdownMenuItem
+              className="flex gap-2 items-center cursor-pointer"
+              onClick={handleToggleFavorite}
+            >
+              {isFavorite ? (
+                <>
+                  <StarIcon className="h-4 w-4" /> Unfavorite
+                </>
+              ) : (
+                <div className="text-yellow-600 flex gap-2 items-center">
+                  <StarIcon className="h-4 w-4" /> Favorite
+                </div>
+              )}
+            </DropdownMenuItem>
+          )}
+
+          {/* DELETE ACTION */}
           <Protect role="org:admin">
-            <DropdownMenuSeparator />
+            {!pathname.includes("/dashboard/trash") && (
+              <DropdownMenuSeparator />
+            )}
             <DropdownMenuItem
               className="flex gap-2 items-center text-red-600 cursor-pointer"
               onClick={() => setIsDialogOpen(true)}
             >
-              <Trash2 className="h-4 w-4" /> Delete
+              <Trash2 className="h-4 w-4" />{" "}
+              {pathname.includes("/dashboard/trash") ? "Delete now" : "Delete"}
             </DropdownMenuItem>
           </Protect>
+
+          {/* RESTORE ACTION */}
+          {pathname.includes("/dashboard/trash") && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="flex gap-2 items-center cursor-pointer"
+                onClick={handleRestore}
+              >
+                <AmbulanceIcon className="h-4 w-4" /> Restore
+              </DropdownMenuItem>
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </>
@@ -183,6 +230,8 @@ const FilePreview = ({ file }: { file: Doc<"files"> }) => {
 };
 
 export default function FileCard({ file }: { file: FileWithIsFavorite }) {
+  const pathname = usePathname();
+
   return (
     <Card className="flex flex-col gap-2">
       <CardHeader className="relative">
@@ -198,13 +247,22 @@ export default function FileCard({ file }: { file: FileWithIsFavorite }) {
         <FilePreview file={file} />
       </CardContent>
       <CardFooter className="flex justify-center">
-        <Button
-          onClick={() => {
-            window.open(file.url, "_blank");
-          }}
-        >
-          Download
-        </Button>
+        {pathname.includes("/dashboard/trash") ? (
+          <div className="flex flex-col items-center">
+            <span>Will be deleted permanently on</span>
+            <span className="text-red-600">
+              {moment(file.deleteAt).format("MMM DD, YYYY")}
+            </span>
+          </div>
+        ) : (
+          <Button
+            onClick={() => {
+              window.open(file.url, "_blank");
+            }}
+          >
+            Download
+          </Button>
+        )}
       </CardFooter>
     </Card>
   );
