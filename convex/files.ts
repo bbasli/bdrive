@@ -206,6 +206,17 @@ export const deleteFile = mutation({
     const deleteAt = moment().add(30, "days").toISOString();
 
     await ctx.db.patch(file._id, { deleteAt });
+
+    const favorite = await ctx.db
+      .query("favorites")
+      .withIndex("by_userId_orgId_fileId", (q) =>
+        q.eq("userId", user._id).eq("orgId", file.orgId).eq("fileId", file._id)
+      )
+      .first();
+
+    if (favorite) {
+      await ctx.db.delete(favorite._id);
+    }
   },
 });
 
