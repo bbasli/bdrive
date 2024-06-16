@@ -36,6 +36,18 @@ export default function SideNavigation() {
           Favorites
         </Button>
       </Link>
+
+      <Link href="/dashboard/trash">
+        <Button
+          variant={"link"}
+          className={clsx("flex gap-2", {
+            "text-orange-500": pathname.includes("/dashboard/trash"),
+          })}
+        >
+          <StarIcon size={24} />
+          Trash
+        </Button>
+      </Link>
     </div>
   );
 }
