@@ -169,8 +169,8 @@ export const getFiles = query({
       );
     }
 
-    files = files.filter(
-      ({ shouldDelete }) => shouldDelete === args.deletedOnly
+    files = files.filter((file) =>
+      args.deletedOnly ? file.deleteAt : !file.deleteAt
     );
 
     return files.map((file) => ({
@@ -201,7 +201,7 @@ export const deleteFile = mutation({
     }
 
     await ctx.db.patch(file._id, {
-      shouldDelete: true,
+      deleteAt: new Date().toISOString(),
     });
   },
 });

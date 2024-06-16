@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 
-import { FileIcon, StarIcon } from "lucide-react";
+import { FileIcon, StarIcon, Trash2Icon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 
@@ -44,7 +44,7 @@ export default function SideNavigation() {
             "text-orange-500": pathname.includes("/dashboard/trash"),
           })}
         >
-          <StarIcon size={24} />
+          <Trash2Icon size={24} />
           Trash
         </Button>
       </Link>
