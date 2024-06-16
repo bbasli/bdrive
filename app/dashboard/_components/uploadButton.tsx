@@ -118,11 +118,12 @@ export default function UploadButton() {
         title: "File uploaded successfully",
         description: "Now you can see your file in the list.",
       });
-    } catch (error) {
+    } catch (error: any) {
       toast({
         variant: "destructive",
         title: "Failed to upload file",
-        description: "Something went wrong. Please try again later.",
+        description:
+          error.data || "Something went wrong. Please try again later.",
       });
     }
   }

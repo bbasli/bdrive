@@ -40,6 +40,7 @@ import { api } from "@/convex/_generated/api";
 import { useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
 import { Protect } from "@clerk/nextjs";
+import { ConvexError } from "convex/values";
 
 const fileTypesIconMap = {
   image: <ImageIcon />,
@@ -75,11 +76,12 @@ function FileCardActions({
         variant: "success",
         title: "File deleted successfully",
       });
-    } catch (error) {
+    } catch (error: any) {
       toast({
         variant: "destructive",
         title: "Failed to delete file",
         description:
+          error.data ||
           "Something went wrong while deleting the file. Please try again later.",
       });
     }
@@ -99,11 +101,12 @@ function FileCardActions({
           ? "File removed from favorites"
           : "File added to favorites",
       });
-    } catch (error) {
+    } catch (error: any) {
       toast({
         variant: "destructive",
         title: "Failed to favorite file",
         description:
+          error.data ||
           "Something went wrong while favoriting the file. Please try again later.",
       });
     }
