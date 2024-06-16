@@ -1,3 +1,5 @@
+import moment from "moment";
+
 import { ConvexError, v } from "convex/values";
 import { mutation, MutationCtx, query, QueryCtx } from "./_generated/server";
 import { filesTypes } from "./schema";
@@ -200,9 +202,10 @@ export const deleteFile = mutation({
       throw new ConvexError("you do not have access to delete this file");
     }
 
-    await ctx.db.patch(file._id, {
-      deleteAt: new Date().toISOString(),
-    });
+    // delete the file after 30 days
+    const deleteAt = moment().add(30, "days").toISOString();
+
+    await ctx.db.patch(file._id, { deleteAt });
   },
 });
 
