@@ -16,7 +16,7 @@ export default defineSchema({
     orgId: v.string(),
     fileId: v.id("_storage"),
     url: v.string(),
-    deleteAt: v.optional(v.string()),
+    deleteAt: v.optional(v.number()),
   })
     .index("by_orgId", ["orgId"])
     .searchIndex("by_name", {

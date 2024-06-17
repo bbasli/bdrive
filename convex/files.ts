@@ -203,7 +203,7 @@ export const deleteFile = mutation({
     }
 
     // delete the file after 30 days
-    const deleteAt = moment().add(30, "days").toISOString();
+    const deleteAt = moment().add(30, "days").valueOf();
 
     await ctx.db.patch(file._id, { deleteAt });
 
