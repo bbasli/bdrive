@@ -82,7 +82,7 @@ function FileCardActions({
 
       toast({
         variant: "success",
-        title: "File deleted successfully",
+        title: "File moved to trash",
       });
     } catch (error: any) {
       toast({
@@ -183,8 +183,9 @@ function FileCardActions({
             </DropdownMenuItem>
           )}
 
-          {/* DELETE ACTION */}
+          {/* DELETE & RESTORE ACTION */}
           <Protect role="org:admin">
+            {/* DELETE ACTION */}
             {!pathname.includes("/dashboard/trash") && (
               <DropdownMenuSeparator />
             )}
@@ -195,20 +196,20 @@ function FileCardActions({
               <Trash2 className="h-4 w-4" />{" "}
               {pathname.includes("/dashboard/trash") ? "Delete now" : "Delete"}
             </DropdownMenuItem>
-          </Protect>
 
-          {/* RESTORE ACTION */}
-          {pathname.includes("/dashboard/trash") && (
-            <>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                className="flex gap-2 items-center cursor-pointer"
-                onClick={handleRestore}
-              >
-                <AmbulanceIcon className="h-4 w-4" /> Restore
-              </DropdownMenuItem>
-            </>
-          )}
+            {/* RESTORE ACTION */}
+            {pathname.includes("/dashboard/trash") && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="flex gap-2 items-center cursor-pointer"
+                  onClick={handleRestore}
+                >
+                  <AmbulanceIcon className="h-4 w-4" /> Restore
+                </DropdownMenuItem>
+              </>
+            )}
+          </Protect>
         </DropdownMenuContent>
       </DropdownMenu>
     </>
@@ -248,7 +249,7 @@ export default function FileCard({ file }: { file: FileWithIsFavorite }) {
       </CardContent>
       <CardFooter className="flex justify-center">
         {pathname.includes("/dashboard/trash") ? (
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center text-center">
             <span>Will be deleted permanently on</span>
             <span className="text-red-600">
               {moment(file.deleteAt).format("MMM DD, YYYY")}
