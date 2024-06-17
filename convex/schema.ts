@@ -22,7 +22,8 @@ export default defineSchema({
     .searchIndex("by_name", {
       searchField: "name",
       filterFields: ["orgId"],
-    }),
+    })
+    .index("by_deleteAt", ["deleteAt"]),
 
   favorites: defineTable({
     fileId: v.id("files"),
