@@ -6,7 +6,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="w-full pt-12">
+    <main className="container mx-auto pt-12">
       <div className="flex h-full">
         <SideNavigation />
 
