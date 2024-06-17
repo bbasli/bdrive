@@ -1,7 +1,13 @@
 import moment from "moment";
 
 import { ConvexError, v } from "convex/values";
-import { mutation, MutationCtx, query, QueryCtx } from "./_generated/server";
+import {
+  internalMutation,
+  mutation,
+  MutationCtx,
+  query,
+  QueryCtx,
+} from "./_generated/server";
 import { filesTypes } from "./schema";
 import { Id } from "./_generated/dataModel";
 
@@ -275,5 +281,23 @@ export const toggleFavorite = mutation({
     }
 
     await ctx.db.delete(favorite._id);
+  },
+});
+
+export const removeDeletableFiles = internalMutation({
+  async handler(ctx) {
+    const today = moment().valueOf();
+
+    const deletableFiles = await ctx.db
+      .query("files")
+      .withIndex("by_deleteAt", (q) => q.lt("deleteAt", today))
+      .collect();
+
+    await Promise.all(
+      deletableFiles.map(async (file) => {
+        await ctx.storage.delete(file.fileId);
+        return await ctx.db.delete(file._id);
+      })
+    );
   },
 });
