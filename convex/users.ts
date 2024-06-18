@@ -24,6 +24,22 @@ export const createUser = internalMutation({
   },
 });
 
+export const updateUser = internalMutation({
+  args: {
+    tokenIdentifier: v.string(),
+    name: v.string(),
+    image: v.optional(v.string()),
+  },
+  async handler(ctx, args) {
+    const user = await getUser(ctx, args.tokenIdentifier);
+
+    await ctx.db.patch(user._id, {
+      name: args.name,
+      image: args.image,
+    });
+  },
+});
+
 export async function getUser(
   ctx: QueryCtx | MutationCtx,
   tokenIdentifier: string
