@@ -34,6 +34,7 @@ export default defineSchema({
   users: defineTable({
     name: v.string(),
     tokenIdentifier: v.string(),
+    image: v.optional(v.string()),
     orgIds: v.array(
       v.object({
         orgId: v.string(),
