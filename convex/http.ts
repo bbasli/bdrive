@@ -33,7 +33,7 @@ http.route({
           });
           break;
         case "user.updated":
-          await ctx.runMutation(internal.users.createUser, {
+          await ctx.runMutation(internal.users.updateUser, {
             tokenIdentifier: `https://${process.env.CLERK_HOSTNAME}|${result.data.id}`,
             name: `${result.data.first_name ?? ""} ${
               result.data.last_name ?? ""
