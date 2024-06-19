@@ -38,13 +38,14 @@ import {
 } from "lucide-react";
 
 import { ReactNode, useState } from "react";
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
 import { Protect } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 import moment from "moment";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const fileTypesIconMap = {
   image: <ImageIcon />,
@@ -233,6 +234,10 @@ const FilePreview = ({ file }: { file: Doc<"files"> }) => {
 export default function FileCard({ file }: { file: FileWithIsFavorite }) {
   const pathname = usePathname();
 
+  const userProfile = useQuery(api.users.getUserProfile, {
+    userId: file.userId,
+  });
+
   return (
     <Card className="flex flex-col gap-2">
       <CardHeader className="relative">
@@ -248,6 +253,11 @@ export default function FileCard({ file }: { file: FileWithIsFavorite }) {
         <FilePreview file={file} />
       </CardContent>
       <CardFooter className="flex justify-center">
+        <Avatar>
+          <AvatarImage src={userProfile?.image} />
+          <AvatarFallback>{userProfile?.name}</AvatarFallback>
+        </Avatar>
+
         {pathname.includes("/dashboard/trash") ? (
           <div className="flex flex-col items-center text-center">
             <span>Will be deleted permanently on</span>
