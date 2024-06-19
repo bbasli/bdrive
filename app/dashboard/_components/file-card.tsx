@@ -29,6 +29,7 @@ import {
 import { Doc } from "@/convex/_generated/dataModel";
 import {
   AmbulanceIcon,
+  DownloadIcon,
   EllipsisVertical,
   FileTextIcon,
   GanttChartIcon,
@@ -56,9 +57,11 @@ const fileTypesIconMap = {
 type FileWithIsFavorite = Doc<"files"> & { isFavorite: boolean };
 
 function FileCardActions({
+  url,
   fileId,
   isFavorite,
 }: {
+  url: string;
   fileId: Doc<"files">["_id"];
   isFavorite: boolean;
 }) {
@@ -211,6 +214,16 @@ function FileCardActions({
               </>
             )}
           </Protect>
+
+          {/* DOWNLOAD ACTION */}
+          <DropdownMenuItem
+            className="flex gap-2 items-center cursor-pointer"
+            onClick={() => {
+              window.open(url, "_blank");
+            }}
+          >
+            <DownloadIcon className="h-4 w-4" /> Download
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </>
@@ -246,7 +259,11 @@ export default function FileCard({ file }: { file: FileWithIsFavorite }) {
           {file.name}
         </CardTitle>
         <div className="absolute top-2 right-2">
-          <FileCardActions fileId={file._id} isFavorite={file.isFavorite} />
+          <FileCardActions
+            fileId={file._id}
+            isFavorite={file.isFavorite}
+            url={file.url}
+          />
         </div>
       </CardHeader>
       <CardContent className="h-[200px] flex justify-center items-center">
@@ -255,24 +272,17 @@ export default function FileCard({ file }: { file: FileWithIsFavorite }) {
       <CardFooter className="flex justify-center">
         <Avatar>
           <AvatarImage src={userProfile?.image} />
-          <AvatarFallback>{userProfile?.name}</AvatarFallback>
+          <AvatarFallback>CN</AvatarFallback>
         </Avatar>
+        {userProfile?.name}
 
-        {pathname.includes("/dashboard/trash") ? (
+        {pathname.includes("/dashboard/trash") && (
           <div className="flex flex-col items-center text-center">
             <span>Will be deleted permanently on</span>
             <span className="text-red-600">
               {moment(file.deleteAt).format("MMM DD, YYYY")}
             </span>
           </div>
-        ) : (
-          <Button
-            onClick={() => {
-              window.open(file.url, "_blank");
-            }}
-          >
-            Download
-          </Button>
         )}
       </CardFooter>
     </Card>
