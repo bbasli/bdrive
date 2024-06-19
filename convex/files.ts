@@ -116,6 +116,7 @@ export const uploadFile = mutation({
       type: args.type,
       orgId: args.orgId,
       fileId: args.fileId,
+      userId: hasAccess.user._id,
       url,
     });
   },
