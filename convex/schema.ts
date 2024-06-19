@@ -15,6 +15,7 @@ export default defineSchema({
     type: filesTypes,
     orgId: v.string(),
     fileId: v.id("_storage"),
+    userId: v.id("users"),
     url: v.string(),
     deleteAt: v.optional(v.number()),
   })
