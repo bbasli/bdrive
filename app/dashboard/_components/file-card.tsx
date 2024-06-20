@@ -253,9 +253,9 @@ export default function FileCard({ file }: { file: FileWithIsFavorite }) {
   });
 
   return (
-    <Card className="flex flex-col gap-2">
+    <Card>
       <CardHeader className="relative">
-        <CardTitle className="flex gap-4">
+        <CardTitle className="flex gap-4 text-base font-normal">
           {fileTypesIconMap[file.type]}
           {file.name}
         </CardTitle>
@@ -270,7 +270,7 @@ export default function FileCard({ file }: { file: FileWithIsFavorite }) {
       <CardContent className="h-[200px] flex justify-center items-center">
         <FilePreview file={file} />
       </CardContent>
-      <CardFooter className="flex justify-between text-xs text-gray-700 ">
+      <CardFooter className="flex justify-between text-xs text-gray-700 gap-2">
         <div className="flex gap-2 w-40 items-center">
           <Avatar className="w-6 h-6">
             <AvatarImage src={userProfile?.image} />
