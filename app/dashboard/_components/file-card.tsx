@@ -270,12 +270,17 @@ export default function FileCard({ file }: { file: FileWithIsFavorite }) {
       <CardContent className="h-[200px] flex justify-center items-center">
         <FilePreview file={file} />
       </CardContent>
-      <CardFooter className="flex justify-center">
-        <Avatar>
-          <AvatarImage src={userProfile?.image} />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
-        {userProfile?.name}
+      <CardFooter className="flex justify-between text-xs text-gray-700 ">
+        <div className="flex gap-2 w-40 items-center">
+          <Avatar className="w-6 h-6">
+            <AvatarImage src={userProfile?.image} />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+          {userProfile?.name}
+        </div>
+        <div>
+          Uploaded on {moment(file._creationTime).format("MMMM DD, YYYY")}
+        </div>
 
         {pathname.includes("/dashboard/trash") && (
           <div className="flex flex-col items-center text-center">
