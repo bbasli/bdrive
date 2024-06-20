@@ -214,6 +214,7 @@ function FileCardActions({
               </>
             )}
           </Protect>
+          <DropdownMenuSeparator />
 
           {/* DOWNLOAD ACTION */}
           <DropdownMenuItem
