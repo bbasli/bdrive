@@ -21,6 +21,11 @@ export default function Header() {
             <h1 className="text-2xl font-bold text-gray-900">B-Drive</h1>
           </div>
         </Link>
+
+        <Button variant="outline">
+          <Link href="/dashboard/files">Your files</Link>
+        </Button>
+
         <div>
           <OrganizationSwitcher />
           <UserButton />
