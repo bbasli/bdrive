@@ -296,6 +296,10 @@ export const removeDeletableFiles = internalMutation({
 
     await Promise.all(
       deletableFiles.map(async (file) => {
+        if (!file.deleteAt) {
+          return;
+        }
+
         await ctx.storage.delete(file.fileId);
         return await ctx.db.delete(file._id);
       })
