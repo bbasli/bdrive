@@ -16,6 +16,8 @@ import UploadButton from "../_components/uploadButton";
 import EmptyFileList from "../_components/empty-file-list";
 import FileCardList from "../_components/file-card-list";
 import SearchBar from "../_components/search-bar";
+import { DataTable } from "./file-table";
+import { columns } from "./columns";
 
 export default function FileBrowser({
   title,
@@ -41,6 +43,7 @@ export default function FileBrowser({
     api.files.getFiles,
     orgId ? { orgId, query, favoritesOnly, deletedOnly } : "skip"
   );
+
   const isLoading = files === undefined;
 
   return (
@@ -53,6 +56,8 @@ export default function FileBrowser({
       )}
 
       {!isLoading && files.length === 0 && !query && <EmptyFileList />}
+
+      <DataTable columns={columns} data={files || []} />
 
       {!isLoading && files.length > 0 && (
         <div>
