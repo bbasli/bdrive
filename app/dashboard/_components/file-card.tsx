@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -8,42 +7,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 
 import { Doc } from "@/convex/_generated/dataModel";
-import {
-  AmbulanceIcon,
-  DownloadIcon,
-  EllipsisVertical,
-  FileTextIcon,
-  GanttChartIcon,
-  ImageIcon,
-  StarIcon,
-  Trash2,
-} from "lucide-react";
+import { FileTextIcon, GanttChartIcon, ImageIcon } from "lucide-react";
 
-import { ReactNode, useState } from "react";
-import { useMutation, useQuery } from "convex/react";
+import { ReactNode } from "react";
+import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
-import { Protect } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 import moment from "moment";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
