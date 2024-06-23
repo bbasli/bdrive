@@ -8,6 +8,7 @@ import { Doc, Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import FileCardActions from "./file-actions";
 
 const UserProfile = ({ userId }: { userId: Id<"users"> }) => {
   const userProfile = useQuery(api.users.getUserProfile, { userId });
@@ -33,7 +34,6 @@ export const columns: ColumnDef<Doc<"files">>[] = [
     header: "Type",
   },
   {
-    accessorKey: "userId",
     header: "Uploaded By",
     cell: ({ row }) => {
       const userId = row.getValue("userId") as Id<"users">;
@@ -41,11 +41,22 @@ export const columns: ColumnDef<Doc<"files">>[] = [
     },
   },
   {
-    accessorKey: "_creationTime",
     header: "Uploaded On",
     cell: ({ row }) => {
       const createdAt = row.getValue("_creationTime") as MomentInput;
       return moment(createdAt).format("MMM D, YYYY");
+    },
+  },
+  {
+    header: "Actions",
+    cell: ({ row }) => {
+      return (
+        <FileCardActions
+          fileId={row.original._id}
+          isFavorite={false}
+          url={row.original.url}
+        />
+      );
     },
   },
 ];
