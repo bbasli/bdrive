@@ -24,7 +24,9 @@ const UserProfile = ({ userId }: { userId: Id<"users"> }) => {
   );
 };
 
-export const columns: ColumnDef<Doc<"files">>[] = [
+type FileWithIsFavorite = Doc<"files"> & { isFavorite: boolean };
+
+export const columns: ColumnDef<FileWithIsFavorite>[] = [
   {
     accessorKey: "name",
     header: "Name",
@@ -58,7 +60,7 @@ export const columns: ColumnDef<Doc<"files">>[] = [
       return (
         <FileCardActions
           fileId={row.original._id}
-          isFavorite={false}
+          isFavorite={row.original.isFavorite}
           url={row.original.url}
         />
       );
