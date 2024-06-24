@@ -37,6 +37,11 @@ export const columns: ColumnDef<Doc<"files">>[] = [
     header: "Uploaded By",
     cell: ({ row }) => {
       const userId = row.getValue("userId") as Id<"users">;
+
+      if (!userId) {
+        return null;
+      }
+
       return <UserProfile userId={userId} />;
     },
   },
