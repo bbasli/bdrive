@@ -67,7 +67,7 @@ export default function FileBrowser({
             <UploadButton />
           </div>
           <Tabs defaultValue="grid">
-            <TabsList>
+            <TabsList className="mb-4">
               <TabsTrigger value="grid" className="gap-2">
                 <GridIcon />
                 Grid
