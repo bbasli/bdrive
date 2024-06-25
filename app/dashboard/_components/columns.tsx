@@ -38,12 +38,7 @@ export const columns: ColumnDef<FileWithIsFavorite>[] = [
   {
     header: "Uploaded By",
     cell: ({ row }) => {
-      const userId = row.getValue("userId") as Id<"users">;
-
-      if (!userId) {
-        return null;
-      }
-
+      const userId = row.original.userId;
       return <UserProfile userId={userId} />;
     },
   },
