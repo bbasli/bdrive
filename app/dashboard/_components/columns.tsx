@@ -45,7 +45,7 @@ export const columns: ColumnDef<FileWithIsFavorite>[] = [
   {
     header: "Uploaded On",
     cell: ({ row }) => {
-      const createdAt = row.getValue("_creationTime") as MomentInput;
+      const createdAt = row.original._creationTime as MomentInput;
       return moment(createdAt).format("MMM D, YYYY");
     },
   },
