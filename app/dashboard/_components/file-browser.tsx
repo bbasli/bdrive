@@ -19,6 +19,8 @@ import SearchBar from "../_components/search-bar";
 import { DataTable } from "./file-table";
 import { columns } from "./columns";
 
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 export default function FileBrowser({
   title,
   favoritesOnly,
@@ -57,8 +59,6 @@ export default function FileBrowser({
 
       {!isLoading && files.length === 0 && !query && <EmptyFileList />}
 
-      <DataTable columns={columns} data={files || []} />
-
       {!isLoading && files.length > 0 && (
         <div>
           <div className="flex justify-between items-center mb-8 gap-8">
@@ -66,7 +66,18 @@ export default function FileBrowser({
             <SearchBar query={query} setQuery={setQuery} />
             <UploadButton />
           </div>
-          <FileCardList files={files} />
+          <Tabs defaultValue="grid">
+            <TabsList>
+              <TabsTrigger value="grid">Grid</TabsTrigger>
+              <TabsTrigger value="table">Table</TabsTrigger>
+            </TabsList>
+            <TabsContent value="grid">
+              <FileCardList files={files} />
+            </TabsContent>
+            <TabsContent value="table">
+              <DataTable columns={columns} data={files || []} />
+            </TabsContent>
+          </Tabs>
         </div>
       )}
 
