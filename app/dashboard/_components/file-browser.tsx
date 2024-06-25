@@ -6,7 +6,7 @@ import Image from "next/image";
 
 import { useQuery } from "convex/react";
 
-import { Loader2 } from "lucide-react";
+import { GridIcon, Loader2, Rows2Icon } from "lucide-react";
 
 import { useOrganization, useUser } from "@clerk/nextjs";
 
@@ -68,8 +68,14 @@ export default function FileBrowser({
           </div>
           <Tabs defaultValue="grid">
             <TabsList>
-              <TabsTrigger value="grid">Grid</TabsTrigger>
-              <TabsTrigger value="table">Table</TabsTrigger>
+              <TabsTrigger value="grid" className="gap-2">
+                <GridIcon />
+                Grid
+              </TabsTrigger>
+              <TabsTrigger value="table" className="gap-2">
+                <Rows2Icon />
+                Table
+              </TabsTrigger>
             </TabsList>
             <TabsContent value="grid">
               <FileCardList files={files} />
