@@ -25,7 +25,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -43,6 +42,7 @@ export default function FileBrowser({
   const authState = useUser();
 
   const [query, setQuery] = useState("");
+  const [type, setType] = useState("all");
 
   let orgId: string | undefined = undefined;
 
@@ -76,7 +76,7 @@ export default function FileBrowser({
             <UploadButton />
           </div>
           <div>
-            <Select>
+            <Select value={type} onValueChange={setType}>
               <SelectTrigger className="w-[180px]" defaultValue={"all"}>
                 <SelectValue placeholder="All" />
               </SelectTrigger>
