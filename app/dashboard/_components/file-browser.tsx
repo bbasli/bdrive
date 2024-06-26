@@ -20,6 +20,15 @@ import { DataTable } from "./file-table";
 import { columns } from "./columns";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function FileBrowser({
   title,
@@ -65,6 +74,21 @@ export default function FileBrowser({
             <h1 className="text-4xl font-bold">{title}</h1>
             <SearchBar query={query} setQuery={setQuery} />
             <UploadButton />
+          </div>
+          <div>
+            <Select>
+              <SelectTrigger className="w-[180px]" defaultValue={"all"}>
+                <SelectValue placeholder="All" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="image">Image</SelectItem>
+                  <SelectItem value="csv">Csv</SelectItem>
+                  <SelectItem value="pdf">Pdf</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
           <Tabs defaultValue="grid">
             <TabsList className="mb-4">
