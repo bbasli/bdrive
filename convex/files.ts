@@ -124,6 +124,7 @@ export const uploadFile = mutation({
 
 export const getFiles = query({
   args: {
+    type: v.optional(v.string()),
     orgId: v.string(),
     query: v.optional(v.string()),
     favoritesOnly: v.optional(v.boolean()),
@@ -181,6 +182,10 @@ export const getFiles = query({
     files = files.filter((file) =>
       args.deletedOnly ? file.deleteAt : !file.deleteAt
     );
+
+    if (args?.type !== "all") {
+      files = files.filter((file) => file.type === args.type);
+    }
 
     return files.map((file) => ({
       ...file,

@@ -52,7 +52,15 @@ export default function FileBrowser({
 
   const files = useQuery(
     api.files.getFiles,
-    orgId ? { orgId, query, favoritesOnly, deletedOnly } : "skip"
+    orgId
+      ? {
+          orgId,
+          type,
+          query,
+          favoritesOnly,
+          deletedOnly,
+        }
+      : "skip"
   );
 
   const isLoading = files === undefined;
