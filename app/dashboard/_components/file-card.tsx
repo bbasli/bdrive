@@ -32,7 +32,15 @@ const FilePreview = ({ file }: { file: Doc<"files"> }) => {
   const { name, type, url } = file;
 
   if (type === "image") {
-    return <Image src={url} width={128} height={64} alt={name} />;
+    return (
+      <Image
+        src={url}
+        width={128}
+        height={64}
+        alt={name}
+        className="h-full w-auto"
+      />
+    );
   } else if (type === "pdf") {
     return <FileTextIcon className="h-20 w-20" />;
   } else if (type === "csv") {
