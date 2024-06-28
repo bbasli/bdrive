@@ -84,38 +84,40 @@ export default function FileBrowser({
             <UploadButton />
           </div>
           <div>
-            <Select value={type} onValueChange={setType}>
-              <SelectTrigger className="w-[180px]" defaultValue={"all"}>
-                <SelectValue placeholder="All" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="all">All</SelectItem>
-                  <SelectItem value="image">Image</SelectItem>
-                  <SelectItem value="csv">Csv</SelectItem>
-                  <SelectItem value="pdf">Pdf</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+            <Tabs defaultValue="grid">
+              <div className="flex justify-between">
+                <TabsList className="mb-4">
+                  <TabsTrigger value="grid" className="gap-2">
+                    <GridIcon />
+                    Grid
+                  </TabsTrigger>
+                  <TabsTrigger value="table" className="gap-2">
+                    <Rows2Icon />
+                    Table
+                  </TabsTrigger>
+                </TabsList>
+                <Select value={type} onValueChange={setType}>
+                  <SelectTrigger className="w-[180px]" defaultValue={"all"}>
+                    <SelectValue placeholder="All" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="all">All</SelectItem>
+                      <SelectItem value="image">Image</SelectItem>
+                      <SelectItem value="csv">Csv</SelectItem>
+                      <SelectItem value="pdf">Pdf</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+              <TabsContent value="grid">
+                <FileCardList files={files} />
+              </TabsContent>
+              <TabsContent value="table">
+                <DataTable columns={columns} data={files || []} />
+              </TabsContent>
+            </Tabs>
           </div>
-          <Tabs defaultValue="grid">
-            <TabsList className="mb-4">
-              <TabsTrigger value="grid" className="gap-2">
-                <GridIcon />
-                Grid
-              </TabsTrigger>
-              <TabsTrigger value="table" className="gap-2">
-                <Rows2Icon />
-                Table
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="grid">
-              <FileCardList files={files} />
-            </TabsContent>
-            <TabsContent value="table">
-              <DataTable columns={columns} data={files || []} />
-            </TabsContent>
-          </Tabs>
         </div>
       )}
 
