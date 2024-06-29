@@ -166,7 +166,7 @@ export default function FileCardActions({
           )}
 
           {/* DELETE & RESTORE ACTION */}
-          <Protect role="org:admin">
+          <Protect condition={(check) => check({ role: "org:admin" })}>
             {/* DELETE ACTION */}
             {!pathname.includes("/dashboard/trash") && (
               <DropdownMenuSeparator />
