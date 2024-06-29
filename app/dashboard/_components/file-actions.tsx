@@ -36,10 +36,12 @@ import { usePathname } from "next/navigation";
 
 export default function FileCardActions({
   url,
+  userId,
   fileId,
   isFavorite,
 }: {
   url: string;
+  userId: Doc<"users">["_id"];
   fileId: Doc<"files">["_id"];
   isFavorite: boolean;
 }) {

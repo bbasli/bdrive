@@ -54,6 +54,7 @@ export const columns: ColumnDef<FileWithIsFavorite>[] = [
     cell: ({ row }) => {
       return (
         <FileCardActions
+          userId={row.original.userId}
           fileId={row.original._id}
           isFavorite={row.original.isFavorite}
           url={row.original.url}

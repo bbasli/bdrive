@@ -66,6 +66,7 @@ export default function FileCard({ file }: { file: FileWithIsFavorite }) {
         </CardTitle>
         <div className="absolute top-2 right-2">
           <FileCardActions
+            userId={file.userId}
             fileId={file._id}
             isFavorite={file.isFavorite}
             url={file.url}
