@@ -28,7 +28,7 @@ import {
 } from "lucide-react";
 
 import { useState } from "react";
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useToast } from "@/components/ui/use-toast";
 import { Protect } from "@clerk/nextjs";
@@ -53,6 +53,8 @@ export default function FileCardActions({
   const restoreFile = useMutation(api.files.restoreFile);
 
   const toggleFavorite = useMutation(api.files.toggleFavorite);
+
+  const me = useQuery(api.users.getMe);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -168,7 +170,11 @@ export default function FileCardActions({
           )}
 
           {/* DELETE & RESTORE ACTION */}
-          <Protect condition={(check) => check({ role: "org:admin" })}>
+          <Protect
+            condition={(check) =>
+              check({ role: "org:admin" }) || userId === me?._id
+            }
+          >
             {/* DELETE ACTION */}
             {!pathname.includes("/dashboard/trash") && (
               <DropdownMenuSeparator />
