@@ -207,10 +207,11 @@ export const deleteFile = mutation({
 
     const { user, file } = hasAccess;
 
-    const isAdmin =
+    const canDelete =
+      file.userId === user._id ||
       user.orgIds.find(({ orgId }) => orgId === file.orgId)?.role === "admin";
 
-    if (!isAdmin) {
+    if (!canDelete) {
       throw new ConvexError("you do not have access to delete this file");
     }
 
