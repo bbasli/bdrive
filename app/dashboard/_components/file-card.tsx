@@ -58,7 +58,7 @@ export default function FileCard({ file }: { file: FileWithIsFavorite }) {
   });
 
   return (
-    <Card>
+    <Card className="w-fit">
       <CardHeader className="relative">
         <CardTitle className="flex gap-4 text-base font-normal">
           {fileTypesIconMap[file.type]}
@@ -84,16 +84,17 @@ export default function FileCard({ file }: { file: FileWithIsFavorite }) {
           </Avatar>
           {userProfile?.name}
         </div>
-        <div>
-          Uploaded on {moment(file._creationTime).format("MMMM DD, YYYY")}
-        </div>
 
-        {pathname.includes("/dashboard/trash") && (
+        {pathname.includes("/dashboard/trash") ? (
           <div className="flex flex-col items-center text-center">
             <span>Will be deleted permanently on</span>
             <span className="text-red-600">
               {moment(file.deleteAt).format("MMM DD, YYYY")}
             </span>
+          </div>
+        ) : (
+          <div>
+            Uploaded on {moment(file._creationTime).format("MMMM DD, YYYY")}
           </div>
         )}
       </CardFooter>
