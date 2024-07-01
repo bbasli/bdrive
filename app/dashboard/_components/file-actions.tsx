@@ -133,14 +133,13 @@ export default function FileCardActions({
               Are you sure you want to delete this file?
             </AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your
-              file.
+              The file will be moved to trash and can be restored later.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction onClick={handleDelete}>
-              Delete file
+              Trash
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
