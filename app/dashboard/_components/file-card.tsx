@@ -76,7 +76,7 @@ export default function FileCard({ file }: { file: FileWithIsFavorite }) {
       <CardContent className="h-[200px] flex justify-center items-center">
         <FilePreview file={file} />
       </CardContent>
-      <CardFooter className="flex justify-between text-xs text-gray-700 gap-2">
+      <CardFooter className="flex justify-between text-xs text-gray-700">
         <div className="flex gap-2 w-40 items-center">
           <Avatar className="w-6 h-6">
             <AvatarImage src={userProfile?.image} />
@@ -93,8 +93,9 @@ export default function FileCard({ file }: { file: FileWithIsFavorite }) {
             </span>
           </div>
         ) : (
-          <div>
-            Uploaded on {moment(file._creationTime).format("MMMM DD, YYYY")}
+          <div className="flex flex-col w-full">
+            <span>Uploaded on </span>
+            <span>{moment(file._creationTime).format("MMMM DD, YYYY")}</span>
           </div>
         )}
       </CardFooter>
