@@ -58,7 +58,7 @@ export default function FileCard({ file }: { file: FileWithIsFavorite }) {
   });
 
   return (
-    <Card className="w-fit">
+    <Card>
       <CardHeader className="relative">
         <CardTitle className="flex gap-4 text-base font-normal">
           {fileTypesIconMap[file.type]}
