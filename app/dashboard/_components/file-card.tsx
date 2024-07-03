@@ -82,7 +82,7 @@ export default function FileCard({ file }: { file: FileWithIsFavorite }) {
             <AvatarImage src={userProfile?.image} />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
-          {userProfile?.name}
+          <span>{userProfile?.name}</span>
         </div>
 
         {pathname.includes("/dashboard/trash") ? (
